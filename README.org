@@ -1,18 +1,37 @@
 * Screen-settings
+Since there is currently a bug with AMD radeon multi gpu systems with the AMD open driver, over time I had to create a script that would take care of solving the heinous riulo that the aforementioned
+module could not perform correctly, especially under X11, it wasn't very simple, because I hadn't found documentation about it, but in the end I managed to find a square.
+** What will the repository contain?
+The repository will contain my script plus all the documentation to correctly generate your own file to be executed at X11 startup to maintain your setup without having to reset it every damn time,
+then the actual documentation.
+** My setup
+My setup includes a 22" monitor in 16:9 resolution 1920x1080 horizontally named in the graph (/screen1/), a 19" monitor resolution *1360x768* (/screen3/) and a 22" monitor in 16:9 resolution 1920x1080 vertically named (/screen2/)
 #+begin_src
  __________________________                          ________________
 |                          |                        |                |
 |                          |                        |                |
 |                          |                        |                |
+|         screen1          |                        |                |
 |                          |                        |                |
-|                          |                        |                |
-|                          |                        |                |
+|                          |                        |     screen2    |
 |__________________________| _____________________  |                |
                             |                     | |                |
                             |                     | |                |
                             |                     | |                |
-                            |                     | |                |
+                            |      screen3        | |                |
                             |                     | |________________|
                             |                     |
                             |_____________________|
+#+end_src
+** screen.sh
+#+begin_src bash
+#!/bin/env sh
+screen1=$(xrandr --listmonitors | awk '{print $2}' | grep - | sed 's/+//' | sed 's/*//' | grep "HDMI-A") 
+screen2=$(xrandr --listmonitors | awk '{print $2}' | grep - | sed 's/+//' | sed 's/*//' | grep "DVI")
+screen3=$(xrandr --listmonitors | awk '{print $2}' | grep - | sed 's/+//' | sed 's/*//' | grep "HDMI-2")
+
+xrandr --output DisplayPort-0 --off --output $screen1 \
+       --mode 1920x1080 --pos 0x321 --rotate normal --output $screen2 --mode 1920x1080 \
+       --pos 2835x0 --rotate left --output $screen3 --mode 1360x768 --pos 1461x1401 --rotate \
+       normal --output DVI-2-0 --off --output VGA-2-0 --off
 #+end_src
