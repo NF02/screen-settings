@@ -13,10 +13,19 @@ setup1()
 
 setup2()
 {
+    # bug fix
+    xrandr --output DisplayPort-0 --off --output $screen1 --mode 1920x1080 --pos 0x0 --rotate normal --output $screen2 --mode 1920x1080 --pos 1920x0 \
+	   --rotate normal --output $screen3 --mode 1360x768
+
     xrandr --output DisplayPort-0 --off --output $screen1 --mode 1920x1080 --pos 0x0 \
 	   --rotate normal --output $screen2 --mode 1920x1080 --pos 1920x0 --rotate normal \
 	   --output $screen3 --off 
 
+}
+setup3()
+{
+     xrandr --output DisplayPort-0 --off --output $screen1 --mode 1920x1080 --pos 0x0 --rotate normal --output $screen2 --mode 1920x1080 --pos 1920x0 \
+	   --rotate normal --output $screen3 --mode 1360x768
 }
 
 if [[ $1 == "-1" ]];then
@@ -24,5 +33,8 @@ if [[ $1 == "-1" ]];then
 	exit 0
    elif [[ $1 == "-2" ]];then
 	setup2
+	exit 0
+   elif [[ $1 == "-3" ]];then
+	setup3
 	exit 0
 fi
